@@ -1,0 +1,50 @@
+<%- include ('header') %>
+
+<div class="row">
+    <div class="col">
+        <% if (title != '') { %>
+            <h1><%=title%></h1>
+        <% } %>
+    </div>
+    <div class="col">
+        <a href="/courses/createCourse" class="btn btn-primary float-right">+ Add Course</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Photo</th>
+                    <th>Course Name</th>
+                    <th>Category</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                </tr>
+			</thead>
+			<tbody>
+				<% courses.forEach((course, index)=> {%>
+					<tr>
+						<td><%=(index+1)%></td>
+						<td>
+                            <img src="<%=course.photo%>" width="80px"/>
+						</td>
+						<td><%=course.name%></td>
+                        <td><%=course.category%></td>
+						<td><%=course.duration%></td>
+						<td>
+                            
+                            <a href="/courses/listCourse/<%=course.id%>" class="btn btn-primary btn-sm">View</a>
+                            <a href="/courses/updateCourse/<%=course.id%>" class="btn btn-secondary btn-sm">Update</a>
+                            <a href="/courses/deleteCourse/<%=course.id%>" class="btn btn-danger btn-sm">Delete</a>
+						</td>
+					</tr>
+				<% }) %>
+			</tbody>
+        </table>        
+    </div>
+</div>
+
+<%- include ('footer') %>

@@ -1,0 +1,59 @@
+<%- include ('header') %>
+<div class="row">
+    <div class="col">
+        <% if (title != '') { %>
+            <h1><%=title%></h1>
+        <% } %>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <span>
+            <label for="name">Name</label>
+            <input type="text" name="name" value="<%=course.name%>" disabled>
+        </span>
+        <span>
+            <label for="category">Category</label>
+            <input type="text" name="category" value="<%=course.category%>" disabled>
+        </span>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <label for="oneLiner">One Liner</label>
+        <input type="text" name="oneLiner" value="<%=course.oneLiner%>" disabled>
+    </div>
+</div>
+<div class="row">
+    <div class = "col">
+        <span>
+            <label for="duration">Duration (Hrs)</label>
+            <input type="number" name="duration" value="<%=course.duration%>" disabled>
+        </span>
+        <span>
+            <label for="language">Language</label>
+            <input name="language" id="language" value="<%=course.language%>" disabled>
+        </span>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <label for="description">Description</label>
+        <textarea name="description" rows="5" ><%=course.description%></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class = "col">
+        <%const altText=course.name+" Logo"%>
+        <label for="Logo">Photo URL</label>
+        <img src="<%=course.photo%>" class="square" alt="<%=altText%>"" style="width:120px">
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <a href="/courses/listCourses" class="btn btn-primary float-right">Back to List Courses</a>
+    </div>
+</div>
+
+<%- include ('footer') %>

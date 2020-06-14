@@ -1,0 +1,71 @@
+<%- include ('header') %>
+<div class="heading">
+    <div class="col">
+        <% if (title != '') { %>
+            <h1><%=title%></h1>
+        <% } %>
+    </div>
+</div>
+
+<% if(errors && Object.keys(errors).length > 0 ) { %>
+    <div class="alert alert-danger">
+        <ul>
+            <% for(let i in errors) { %>
+                <li><%=errors[i]%></li>
+            <% } %>
+        </ul>
+    </div>
+<% } %>
+
+<form id="update-courses-class" action="" method="post">
+    <<div class="row">
+        <div class="col">
+            <span>
+                <label for="name">Name</label>
+                <input type="text" name="name" class="form-control" value="<%=currCourse.name%>" >
+            </span>
+            <span>
+                <label for="category">Category</label>
+                <input type="text" name="category" class="form-control" value="<%=currCourse.category%>" >
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="oneLiner">One Liner</label>
+            <input type="text" name="oneLiner" class="form-control" value="<%=currCourse.oneLiner%>" >
+        </div>
+    </div>
+    <div class="row">
+        <div class = "col">
+            <span>
+                <label for="duration">Duration (Hrs)</label>
+                <input type="number" name="duration" class="form-control" value="<%=currCourse.duration%>" >
+            </span>
+            <span>
+                <label for="language">Language</label>
+                <input type="text" name="language"  class="form-control" value="<%=currCourse.language%>" >
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label for="description">Description</label>
+            <textarea name="description" rows="5" class="form-control" ><%=currCourse.description%></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class = "col">
+            <%const altText=currCourse.name+" Logo"%>
+            <label for="photo">Photo URL</label>
+            <input type="text" name="photo" class="form-control" value="<%=currCourse.photo%>">
+            <img src="<%=currCourse.photo%>" class="form-control" class="square" alt="<%=altText%>"" style="width:120px">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+<%- include ('footer') %>

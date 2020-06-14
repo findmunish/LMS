@@ -1,0 +1,60 @@
+<%- include ('header') %>
+<div class="row">
+    <div class="col">
+        <% if (title != '') { %>
+            <h1><%=title%></h1>
+        <% } %>
+    </div>
+</div>
+
+<% if(errors && Object.keys(errors).length > 0 ) { %>
+    <div class="alert alert-danger">
+        <ul>
+            <% for(let i in errors) { %>
+                <li><%=errors[i]%></li>
+            <% } %>
+        </ul>
+    </div>
+<% } %>
+
+<form id="update-courses-class" action="" method="post">
+    <div class="form-row">
+        <span>
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name"/>
+        </span>
+        <span>
+            <label for="category">Category</label>
+            <input type="text" class="form-control" name="category"/>
+            <!--<select name="selectCourseName" class="form-control" id="select-course-name" placeholder="Enter Category">
+            </select>-->
+        </span>
+    </div>
+    <div class="form-row">
+        <label>
+            One Liner
+            <input name="oneLiner" id="one-liner" class="form-control">
+        </label>
+    </div>
+    <div class="form-row" class="form-group col-md-5">
+        <span>
+            <label for="duration">Duration (Hrs)</label>
+            <input type="number" class="form-control" name="duration"/>
+        </span>
+        <span>
+            <label for="language">Language</label>
+            <input name="language" id="language" class="form-control">
+        </span>
+        <span>
+            <label for="Logo">Photo URL</label>
+            <input type="url" class="form-control" name="photo"/>
+        </span>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" name="description" rows="5"></textarea>
+    </div>
+    <button class="btn btn-primary">Add</button>
+</form>
+
+<%- include ('footer') %>

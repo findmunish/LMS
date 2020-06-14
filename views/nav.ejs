@@ -1,0 +1,42 @@
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+    <% if (headerTitle != '') { %>
+      <h5 class="my-0 mr-md-auto font-weight-normal"><%=headerTitle%></h5>
+    <% } %>
+    <nav class="my-2 my-md-0 mr-md-3">
+      <a class="p-2 text-dark" href="/">Home</a>
+      <% if (userId === undefined) { %>
+        <a class="p-2 text-dark" href="/api/login">Login</a>
+      <% } else { %>
+        <!--<a id="loggedUser" class="p-2 text-dark" href="#"><%=loggedUser%></a>-->
+        <!--<button onmousemove="showHideUpdateProfile()"class="p-2 text-dark"><%=loggedUser%></button>-->
+        <button onclick="showHideUpdateProfile()"class="p-2 text-dark"><%=loggedUser%></button>
+      <% } %>
+      <a class="p-2 text-dark" href="#">My Dashboard</a>
+    </nav>
+    <% if (userId === undefined) { %>
+        <a class="btn btn-outline-primary" href="/api/register">Sign up</a>
+    <% } else { %>
+      <form action="/api/logout" method="post">
+        <button class="btn btn-primary">Logout</button>
+      </form>
+    <% } %>
+  </div>
+  <div>
+    <% if (userId !== undefined) { %>
+    <div id="edit-profile" style.display="none">
+        <p style="text-align: right;"><img src="/assets/login_logo.png" class="square" alt="EGyan LMS Image" style="width:25px"></p>
+        <p style="text-align: right;"><a class="p-2 text-dark" href="/api/editProfile">Edit Profile</a></p>
+        <p style="text-align: right;"><a class="p-2 text-dark" href="/api/changePassword">Change Password</a></p>
+      </div>
+      <script>
+        document.getElementById("edit-profile").style.display = "none"
+        function showHideUpdateProfile() {
+          var x = document.getElementById("edit-profile");
+          if (x.style.display === "none") {
+            x.style.display = "block";
+          } else {
+            x.style.display = "none";
+          }
+        } 
+      </script>
+    <% } %>

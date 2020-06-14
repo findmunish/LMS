@@ -1,0 +1,21 @@
+<%- include ('header') %>
+
+<% if(errors && Object.keys(errors).length > 0 ) { %>
+    <div class="alert alert-danger">
+        <ul>
+            <% for(let i in errors) { %>
+                <li><%=errors[i]%></li>
+            <% } %>
+        </ul>
+    </div>
+<% } %>
+
+<div class = "row">
+    <%- include ('loginPage') %>
+</div>
+<div class="row">
+    <div class="col">
+        <h5 class="p-2 text-dark">Not a user? Click here to <a href="/api/register">Sign Up</a></h5>
+    </div>
+</div>
+<%- include ('footer') %>

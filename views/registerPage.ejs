@@ -1,0 +1,42 @@
+    <div class="col">
+        <h3>Register</h3>
+        <hr />
+        <form action="/api/register" method="post">
+            <div class="form-row">
+                <span>
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" />
+                </span>
+                <span>
+                    <label for="blank-space"> </label>
+                    <label for="blank-space"> </label>
+                </span>
+                <span>
+                    <label for="type">Type</label>
+                    <select name="type" class="form-control">
+                        <option value="1" selected>Instructor</option>
+                        <option value="2">Student</option>
+                    </select>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" />
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" />
+            </div>
+
+            <div class="form-group">
+                <label for="confirm password">Confirm Password</label>
+                <input type="password" class="form-control" name="confirmPassword" />
+            </div>
+
+            <button class="btn btn-primary">Signup</button>
+        </form>
+    </div>
+    
+   
