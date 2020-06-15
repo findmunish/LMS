@@ -1,25 +1,4 @@
 const validator = require('validator')
-const User = require("../models/User")
-
-const isPasswordsMatch = (userId, email, password) => {
-    let outputUser = undefined
-
-    if(email === undefined) {
-        User.findOne({ _id: Object(userId) })
-        .then((user => outputUser = user))
-        .catch(() => outputUser = undefined)
-    } else {
-        User.findOne({ email: email.trim().toLowerCase() })
-        .then((user => outputUser = user))
-        .catch(() => outputUser = undefined)
-    }
-
-    if(outputUser) {
-        return bcrypt.compareSync(password, outputUser.password)
-    }
-
-    return false
-}
 
 const isNameValid = (name) => {
     const updatedName = name.trim().toLowerCase()
