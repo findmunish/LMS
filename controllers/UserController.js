@@ -17,7 +17,7 @@ exports.login = (req, res) => {
 }
 
 exports.register = (req, res) => {
-    //console.log('Register::Get:', req.session.userId)
+    //console.log('register::Get:', req.session.userId)
     const data = {
         headerTitle: "LMS | EGyan Portal",
         title: 'LMS | Login',
@@ -27,7 +27,7 @@ exports.register = (req, res) => {
     }
     req.session.errors = {}
 
-    res.render('Register', data)
+    res.render('register', data)
 }
 
 exports.loginProcess = (req, res) => {
