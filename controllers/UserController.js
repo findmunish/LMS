@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const User = require("../models/User")
-const SYNC_SALT_ROUNDS=process.env.SYNC_SALT_ROUNDS
+const SYNC_SALT_ROUNDS=Number(process.env.SYNC_SALT_ROUNDS)
 
 exports.login = (req, res) => {
     //console.log('Login::Get:', req.session.userId)
@@ -78,7 +78,6 @@ exports.registerProcess = async (req, res) => {
             const hash = await bcrypt.hashSync(password, salt)
 
             newUser.password = hash
-
             newUser.save()
             req.session.loggedUser = newUser.name
             req.session.userId = newUser._id
@@ -121,7 +120,7 @@ exports.changePasswordProcess = (req, res) => {
     })
     .then(() => res.redirect('/courses/listCourses'))
     .catch((error) => {
-        console.log(error)
+        //console.log('changePasswordProcess:', error)
         res.status(500).redirect('/api/changePassword')
     })
 }
@@ -160,14 +159,16 @@ exports.editProfileProcess = async (req, res) => {
             if(otherUser) {
                 req.session.errors.email = 'e-Mail already registered'
                 throw Error(req.session.errors.email)
-            } 
+            }
         }
         currentUser.email = email
         currentUser.name = name
         await currentUser.save()
+
+        req.session.loggedUser = currentUser.name
+
         res.redirect('/courses/listCourses')
     } catch (e) {
-        console.log('exception')
         res.status(500).redirect('/api/editProfile')
     }
 }
