@@ -2,6 +2,19 @@ const bcrypt = require('bcryptjs')
 const User = require("../models/User")
 const SYNC_SALT_ROUNDS=Number(process.env.SYNC_SALT_ROUNDS)
 
+exports.userDashboard = (req, res) => {
+    const data = {
+        headerTitle: "LMS | EGyan Portal",
+        title: 'LMS | Login',
+        errors: req.session.errors,
+        userId: req.session.userId,
+        loggedUser: req.session.loggedUser
+    }
+    req.session.errors = {}
+
+    res.render('listCourses', data)
+}
+
 exports.login = (req, res) => {
     //console.log('Login::Get:', req.session.userId)
     const data = {

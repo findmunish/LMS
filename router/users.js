@@ -8,7 +8,7 @@ router.get('/login', userController.login)
 router.get('/register', userController.register)
 router.get('/editProfile', userController.editProfile)
 router.get('/changePassword', userController.changePassword)
-router.get('/dashboard', (req, res) => res.send('User Dashboard!'))
+router.get('/dashboard', userController.userDashboard)
 
 //Processes
 router.post('/login', userValidator.userLoginValidator, userController.loginProcess)
