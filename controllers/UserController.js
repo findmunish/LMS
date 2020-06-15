@@ -43,35 +43,61 @@ exports.register = (req, res) => {
     res.render('register', data)
 }
 
-exports.loginProcess = (req, res) => {
+exports.loginProcess = async (req, res) => {
     const {email, password} = req.body
     const errMsg = 'Either e-Mail is unregistered or password is invalid'
 
-    user = new User()
-    user.email = email
-    user.password = password
-
-    User.findOne({ email })
-        .then((user) => {
-            if(user) {
-                const valid = bcrypt.compareSync(password, user.password)
-                if(valid) {
-                    req.session.userId = user._id
-                    req.session.loggedUser = user.name
-                    res.status(200).redirect('/courses/listCourses')
-                } else {
-                    req.session.errors.password = errMsg
-                    res.status(400).redirect('/api/login')
-                }
-            } else {
-                req.session.errors.email = errMsg
-                res.status(400).redirect('/api/login')
+    try {
+        const user = await User.findOne({ email })
+        if(user) {
+            const valid = await bcrypt.compareSync(password, user.password)
+            if(valid) {
+                req.session.userId = user._id
+                req.session.loggedUser = user.name
+                res.status(200).redirect('/courses/listCourses')
+                return
             }
-        })
-        .catch((error) => {
-            res.status(400).redirect('/api/login')
-        })
+        }
+        if(!req.session.errors) {
+            req.session.errors = {}
+        }
+        req.session.errors.password = errMsg
+        res.status(400).redirect('/api/login')
+
+    } catch(error) {
+        res.status(400).redirect('/api/login')
+    }
 }
+
+// exports.loginProcess = (req, res) => {
+//     const {email, password} = req.body
+//     const errMsg = 'Either e-Mail is unregistered or password is invalid'
+
+//     user = new User()
+//     user.email = email
+//     user.password = password
+
+//     User.findOne({ email })
+//         .then((user) => {
+//             if(user) {
+//                 const valid = bcrypt.compareSync(password, user.password)
+//                 if(valid) {
+//                     req.session.userId = user._id
+//                     req.session.loggedUser = user.name
+//                     res.status(200).redirect('/courses/listCourses')
+//                 } else {
+//                     req.session.errors.password = errMsg
+//                     res.status(400).redirect('/api/login')
+//                 }
+//             } else {
+//                 req.session.errors.email = errMsg
+//                 res.status(400).redirect('/api/login')
+//             }
+//         })
+//         .catch((error) => {
+//             res.status(400).redirect('/api/login')
+//         })
+// }
 
 exports.registerProcess = async (req, res) => {
     const {name, type, email, password} = req.body
@@ -79,6 +105,9 @@ exports.registerProcess = async (req, res) => {
     try {
         const user = await User.findOne({ email: email.trim().toLowerCase() })
         if(user) {
+            if(!req.session.errors) {
+                req.session.errors = {}
+            }
             req.session.errors.email = 'e-Mail already registered'
             throw Error(req.session.errors.email)
         } else {
