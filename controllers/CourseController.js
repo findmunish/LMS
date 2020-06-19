@@ -2,39 +2,43 @@ const Course = require('../models/Course')
 
 exports.listCourses = async (req, res) => {
     try {
-        req.session.errors = {}
-
         const courses = await Course.find()
         const data = {
             headerTitle: "LMS | EGyan Portal",
             title: 'LMS | Login',
             userId: req.session.userId,
             loggedUser: req.session.loggedUser,
+            errors: req.session.errors,
             courses: courses
         }
 
-        await res.render('listCourses', data)
+        req.session.errors = {}
+
+        res.render('listCourses', data)
     } catch (error) {
-        res.status(400).json(error)
+        req.session.errors = error.message
+        res.status(400).redirect('/courses/listCourses/', data)
     }
 }
 
-exports.listCourse = (req, res) => {
-    const data = {
-        headerTitle: "LMS | EGyan Portal",
-        title: 'LMS | Login',
-        userId: req.session.userId,
-        loggedUser: req.session.loggedUser        
-    }
-
-    req.session.errors = {}
-
-    Course.findOne({ _id: req.params.id })
-    .then(course => {
+exports.listCourse = async (req, res) => {
+    try {
+        const data = {
+            headerTitle: "LMS | EGyan Portal",
+            title: 'LMS | Login',
+            userId: req.session.userId,
+            loggedUser: req.session.loggedUser,
+            errors: req.session.errors        
+        }
+    
+        req.session.errors = {}
+        course = await Course.findOne({ _id: req.params.id })
         data.course = course
         res.render('viewCourse', data)
-    })
-    .catch(error => res.json(error))
+    } catch (error) {
+        req.session.errors.courseError = error.message
+        res.status(400).redirect('/courses/listCourses')
+    }
 }
 
 exports.createCourse = (req, res) => {
@@ -65,35 +69,38 @@ exports.createCourseProcesses = (req, res) => {
 
    course.save()
         .then(() => res.status(200).redirect('/courses/listCourses'))
-        .catch((error) => res.status(400).json(error))
+        .catch((error) => {
+            req.session.errors.courseError = error.message
+            res.status(400).redirect('/courses/listCourses')
+        })
 }
 
-exports.updateCourse = (req, res) => {
-    const data = {
-        headerTitle: "LMS | EGyan Portal",
-        title: 'LMS | Login',
-        userId: req.session.userId,
-        errors: req.session.errors,
-        loggedUser: req.session.loggedUser
+exports.updateCourse = async (req, res) => {
+    try {
+        const data = {
+            headerTitle: "LMS | EGyan Portal",
+            title: 'LMS | Login',
+            userId: req.session.userId,
+            errors: req.session.errors,
+            loggedUser: req.session.loggedUser
+        }
+        req.session.errors = {}
+
+        currCourse = await Course.findOne({ _id: req.params.id })
+            data.currCourse = currCourse
+            res.render('updateCourse', data)
+    } catch (error) {
+        req.session.errors.course = 'Requested course does not exist!!'
+        res.status(404).redirect('/courses/listCourses')
     }
-
-    req.session.errors = {}
-
-    Course.findOne({ _id: req.params.id })
-    .then((currCourse) => {
-        data.currCourse = currCourse
-
-        res.render('updateCourse', data)
-    })
-    .catch(error => res.json(error))
 }
 
-exports.updateCourseProcesses = (req, res) => {
-    const {id, name, category, oneLiner, duration, language, description, photo} = req.body
+exports.updateCourseProcesses = async (req, res) => {
+    try {
+        const {id, name, category, oneLiner, duration, language, description, photo} = req.body
 
-    //console.log('global:', description)
-    Course.findOne({ _id: req.params.id })
-        .then(course => {
+        course = await Course.findOne({ _id: req.params.id })
+        if(course) {
             course.name = name
             course.category = category
             course.oneLiner = oneLiner
@@ -102,28 +109,25 @@ exports.updateCourseProcesses = (req, res) => {
             course.description = description
             course.photo = photo
 
-            //console.log('db:', course.description)
-
-            return course.save()
-        })
-        .then(course => res.redirect('/courses/listCourses'))
-        .catch((error) => {
-            //console.log('error updating')
-            res.status(500).redirect('/courses/listCourses')
-        })
+            await course.save()
+            res.redirect('/courses/listCourses')
+        }
+                
+    } catch (error) {
+        req.session.errors.course = error.message
+            res.status(400).redirect('/courses/listCourses')
+    }
 }
 
-exports.deleteCourse = (req, res) => {
-    const id = req.params.id
-    Course.findOne({ _id: Object(id) })
-            .then((course) => {
-                if (!course) {
-                    return res.status(404).send()
-                } else {
-                    return course.remove()
-                }
-            })
-            .then(() => res.redirect('/courses/listCourses'))
-            .catch(() => res.status(500).redirect('/courses/listCourses'))
-}
+exports.deleteCourse = async (req, res) => {
+    try {
+        req.session.errors = {}
+        const course = await Course.findOne({ _id: req.params.id })
+        await course.remove()
 
+        res.redirect('/courses/listCourses')
+    } catch(error) {
+        req.session.errors.course = error.message
+        res.status(500).redirect('/courses/listCourses')
+    }
+}

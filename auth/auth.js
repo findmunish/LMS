@@ -19,3 +19,15 @@ exports.isLoggedIn = (req, res, next) => {
         next()
     }
 }
+
+exports.isNotLoggedIn = (req, res, next) => {
+    if(req.session.errors === undefined) {
+        req.session.errors = {}
+    }
+    if(req.session.userId === undefined) {
+        next()
+    }
+    else {
+        res.redirect('/api/dashboard')
+    }
+}

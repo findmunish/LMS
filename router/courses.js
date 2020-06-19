@@ -2,8 +2,7 @@ const express = require('express')
 const router = express.Router()
 const courseController = require('../controllers/CourseController')
 const courseValidator = require('../controllers/CourseValidator')
-const authController = require('../auth/auth.js')
-const homeRouteController = require('../controllers/homeRouteController')
+const authController = require('../auth/auth')
 
 //UI Routes
 router.get('/listCourses', authController.isLoggedIn, courseController.listCourses)

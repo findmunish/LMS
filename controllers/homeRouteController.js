@@ -30,5 +30,6 @@ exports.invalidRoute = (req, res) => {
         path: req.path,
         method: req.method
     }
-    res.status(404).render('404', data)
+
+    res.status(405).render('404', data)
 }

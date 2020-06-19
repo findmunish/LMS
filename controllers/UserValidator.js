@@ -18,6 +18,12 @@ const isPasswordValid = (password) => {
 }
 
 exports.createUserValidator = (req, res, next) => {
+    if(req.session.userId) {
+        req.session.errors = {}
+        res.redirect('/api/dashboard')
+        return
+    }
+
     const {name, type, email, password, confirmPassword} = req.body
 
     let errors = {}
@@ -43,6 +49,12 @@ exports.createUserValidator = (req, res, next) => {
 }
 
 exports.editProfileValidator = (req, res, next) => {
+    if(!req.session.userId) {
+        req.session.errors = {}
+        res.status(403).render('forbidden', data)
+        return
+    }
+
     const {name, email} = req.body
 
     let errors = {}
@@ -61,6 +73,12 @@ exports.editProfileValidator = (req, res, next) => {
 }
 
 exports.changePasswordValidator = (req, res, next) => {
+    if(!req.session.userId) {
+        req.session.errors = {}
+        res.status(403).render('forbidden', data)
+        return
+    }
+
     const {currPassword, newPassword, confirmPassword} = req.body
 
     let errors = {}
@@ -82,6 +100,12 @@ exports.changePasswordValidator = (req, res, next) => {
 }
 
 exports.userLoginValidator = async (req, res, next) => {
+    if(req.session.userId) {
+        req.session.errors = {}
+        res.redirect('/api/dashboard')
+        return
+    }
+
     const {email, password} = req.body
 
     let errors = {}

@@ -3,7 +3,11 @@ const User = require("../models/User")
 const SYNC_SALT_ROUNDS=Number(process.env.SYNC_SALT_ROUNDS)
 
 exports.userDashboard = (req, res) => {
-    res.redirect('/courses/listCourses')
+    if(req.session.userId) {
+        res.redirect('/courses/listCourses')
+    } else {
+        res.redirect('/')
+    }
 }
 
 exports.login = (req, res) => {
@@ -15,11 +19,7 @@ exports.login = (req, res) => {
         loggedUser: req.session.loggedUser
     }
     req.session.errors = {}
-    if(req.session.userId) {
-        res.redirect('/courses/listCourses')
-    } else {
-        res.render('login', data)
-    }
+    res.render('login', data)
 }
 
 exports.register = (req, res) => {
@@ -31,12 +31,7 @@ exports.register = (req, res) => {
         loggedUser: req.session.loggedUser
     }
     req.session.errors = {}
-
-    if(req.session.userId) {
-        res.redirect('/courses/listCourses')
-    } else {
-        res.render('register', data)
-    }
+    res.render('register', data)
 }
 
 exports.loginProcess = async (req, res) => {
@@ -161,8 +156,13 @@ exports.editProfileProcess = async (req, res) => {
     const {name, email} = req.body
 
     try {
-        const currentUser = await User.findOne({ _id: Object(req.session.userId) })
-        if(user.email !== email.trim().toLowerCase()) {
+        //const currentUser = await User.findOne({ _id: Object(req.session.userId) })
+        const currentUser = await User.findOne({ _id: req.session.userId })
+        if(!currentUser) {
+            req.session.errors.email = 'Cannot find the user!'
+            throw Error(req.session.errors.email)
+        }
+        if(currentUser.email !== email.trim().toLowerCase()) {
             const otherUser = await User.findOne({ email: email.trim().toLowerCase() })
             if(otherUser) {
                 req.session.errors.email = 'e-Mail already registered'
@@ -171,12 +171,14 @@ exports.editProfileProcess = async (req, res) => {
         }
         currentUser.email = email
         currentUser.name = name
+        console.log('BEFORE SAVING THE USEER')
         await currentUser.save()
+        console.log('AFTER SAVING THE USER')
 
         req.session.loggedUser = currentUser.name
-
         res.redirect('/courses/listCourses')
-    } catch (e) {
+    } catch (error) {
+        req.session.errors.email = error.message
         res.status(500).redirect('/api/editProfile')
     }
 }

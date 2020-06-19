@@ -1,5 +1,15 @@
 <%- include ('header') %>
 
+<% if(errors && Object.keys(errors).length > 0 ) { %>
+    <div class="alert alert-danger">
+        <ul>
+            <% for(let i in errors) { %>
+                <li><%=errors[i]%></li>
+            <% } %>
+        </ul>
+    </div>
+<% } %>
+
 <div class="row">
     <div class="col">
         <% if (title != '') { %>

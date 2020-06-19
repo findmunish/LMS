@@ -23,9 +23,19 @@ const performSchemaValidations = (redirectRoute, req, res, next) => {
 }
 
 exports.createCourseValidator = (req, res, next) => {
-    performSchemaValidations('/courses/createCourse', req, res, next)
+    if(!req.session.userId) {
+        req.session.errors = {}
+        res.status(403).render('forbidden', data)
+    } else {
+        performSchemaValidations('/courses/createCourse', req, res, next)
+    }
 }
 
 exports.updateCourseValidator = (req, res, next) => {
-    performSchemaValidations('/courses/updateCourse/' + req.params.id, req, res, next)
+    if(!req.session.userId) {
+        req.session.errors = {}
+        res.status(403).render('forbidden', data)
+    } else {
+        performSchemaValidations('/courses/updateCourse/' + req.params.id, req, res, next)
+    }
 }

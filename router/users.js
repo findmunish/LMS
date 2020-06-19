@@ -2,13 +2,13 @@ const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/UserController')
 const userValidator = require('../controllers/UserValidator')
-const homeRouteController = require('../controllers/homeRouteController')
+const authController = require('../auth/auth')
 
 //UI Routes
-router.get('/login', userController.login)
-router.get('/register', userController.register)
-router.get('/editProfile', userController.editProfile)
-router.get('/changePassword', userController.changePassword)
+router.get('/login', authController.isNotLoggedIn, userController.login)
+router.get('/register', authController.isNotLoggedIn, userController.register)
+router.get('/editProfile', authController.isLoggedIn, userController.editProfile)
+router.get('/changePassword', authController.isLoggedIn, userController.changePassword)
 router.get('/dashboard', userController.userDashboard)
 
 //Processes
@@ -16,6 +16,6 @@ router.post('/login', userValidator.userLoginValidator, userController.loginProc
 router.post('/register', userValidator.createUserValidator, userController.registerProcess)
 router.post('/editProfile', userValidator.editProfileValidator, userController.editProfileProcess)
 router.post('/changePassword', userValidator.changePasswordValidator, userController.changePasswordProcess)
-router.post('/logout', userController.logoutProcess)
+router.post('/logout', authController.isLoggedIn, userController.logoutProcess)
 
 module.exports = router
