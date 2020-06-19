@@ -3,7 +3,7 @@ exports.isLoggedIn = (req, res, next) => {
         if(req.session.errors === undefined) {
             req.session.errors = {}
         }
-        req.session.errors.notLoggedIn = 'Please login / sign-up in to access the resources.'
+        req.session.errors.notLoggedIn = 'Please login / sign-up to access the given resources.'
 
         const data = {
             headerTitle: "LMS | EGyan Portal",

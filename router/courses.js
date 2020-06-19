@@ -10,7 +10,6 @@ router.get('/listCourses', authController.isLoggedIn, courseController.listCours
 router.get('/listCourse/:id', authController.isLoggedIn, courseController.listCourse)
 router.get('/createCourse', authController.isLoggedIn, courseController.createCourse)
 router.get('/updateCourse/:id', authController.isLoggedIn, courseController.updateCourse)
-//router.get('/*', homeRouteController.invalidRoute)
 
 //Processes
 router.post('/createCourse', courseValidator.createCourseValidator, courseController.createCourseProcesses)

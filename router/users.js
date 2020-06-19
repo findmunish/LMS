@@ -10,7 +10,6 @@ router.get('/register', userController.register)
 router.get('/editProfile', userController.editProfile)
 router.get('/changePassword', userController.changePassword)
 router.get('/dashboard', userController.userDashboard)
-router.get('/*', homeRouteController.invalidRoute)
 
 //Processes
 router.post('/login', userValidator.userLoginValidator, userController.loginProcess)

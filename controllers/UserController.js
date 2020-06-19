@@ -7,8 +7,6 @@ exports.userDashboard = (req, res) => {
 }
 
 exports.login = (req, res) => {
-    console.log('inside login, userId', req.session.userId)
-
     const data = {
         headerTitle: "LMS | EGyan Portal",
         title: 'LMS | Login',

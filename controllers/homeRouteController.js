@@ -26,7 +26,9 @@ exports.invalidRoute = (req, res) => {
         title: 'LMS | Login',
         userId: undefined,
         errors: req.session.errors,
-        loggedUser: undefined
+        loggedUser: undefined,
+        path: req.path,
+        method: req.method
     }
     res.status(404).render('404', data)
 }
