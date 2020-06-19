@@ -107,7 +107,7 @@ exports.changePassword = (req, res) => {
         userId: req.session.userId,
         loggedUser: req.session.loggedUser
     }
-    errors = {}
+    req.session.errors = {}
 
     res.render('changePassword', data)
 }
@@ -145,7 +145,7 @@ exports.editProfile = (req, res) => {
         userId: req.session.userId,
         loggedUser: req.session.loggedUser
     }
-    errors = {}
+    req.session.errors = {}
     
     User.findOne({ _id: Object(req.session.userId) })
         .then((user) => {
@@ -155,10 +155,16 @@ exports.editProfile = (req, res) => {
 
                 res.render('editProfile', data)
             } else {
-                res.status(400).redirect('/')
+                req.session.errors.name = 'User not found'
+                res.status(400).redirect('/api/editProfile')
             }
         })
-        .catch((error) => res.status(400).redirect('/'))
+        .catch((error) => {
+            if(!req.session.errors.name) {
+                req.session.errors.name = error.message
+            }
+            res.status(400).redirect('/api/editProfile')
+        })
 }
 
 exports.editProfileProcess = async (req, res) => {

@@ -62,7 +62,7 @@ exports.editProfileValidator = (req, res, next) => {
     if(name==='') errors.name = 'Name cannot be blank'
     if(!isNameValid(name)) errors.name = 'Non-alphabet characters not allowed in name'
 
-    if (!validator.isEmail( email.trim().toLowerCase() )) errors.email = 'e-Mail is not valid'
+    if (email && !validator.isEmail( email.trim().toLowerCase() )) errors.email = 'e-Mail is not valid'
  
     if(Object.keys(errors).length === 0) {
         next()
