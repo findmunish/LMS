@@ -6,12 +6,11 @@
       <a class="p-2 text-dark" href="/">Home</a>
       <% if (userId === undefined) { %>
         <a class="p-2 text-dark" href="/api/login">Login</a>
+        <a class="p-2 text-dark" href="/">My Dashboard</a>
       <% } else { %>
-        <!--<a id="loggedUser" class="p-2 text-dark" href="#"><%=loggedUser%></a>-->
-        <!--<button onmousemove="showHideUpdateProfile()"class="p-2 text-dark"><%=loggedUser%></button>-->
         <button onclick="showHideUpdateProfile()"class="p-2 text-dark"><%=loggedUser%></button>
+        <a class="p-2 text-dark" href="/courses/listCourses">My Dashboard</a>
       <% } %>
-      <a class="p-2 text-dark" href="/courses/listCourses">My Dashboard</a>
     </nav>
     <% if (userId === undefined) { %>
         <a class="btn btn-outline-primary" href="/api/register">Sign up</a>
@@ -40,5 +39,3 @@
         } 
       </script>
     <% } %>
-
-    

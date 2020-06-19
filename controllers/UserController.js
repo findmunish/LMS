@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const User = require("../models/User")
 const SYNC_SALT_ROUNDS=Number(process.env.SYNC_SALT_ROUNDS)
+const SESSION_NAME=process.env.SESSION_NAME
 
 exports.userDashboard = (req, res) => {
     if(req.session.userId) {
@@ -56,6 +57,9 @@ exports.loginProcess = async (req, res) => {
         res.status(400).redirect('/api/login')
 
     } catch(error) {
+        if(!req.session.errors.password) {
+            req.session.errors.password = error.message
+        }
         res.status(400).redirect('/api/login')
     }
 }
@@ -88,6 +92,9 @@ exports.registerProcess = async (req, res) => {
             res.status(200).redirect('/courses/listCourses')
         }
     } catch(error) {
+        if(!req.session.errors.email) {
+            req.session.errors.email = error.message
+        }
         res.status(500).redirect('/api/register')
     }
 }
@@ -123,7 +130,9 @@ exports.changePasswordProcess = (req, res) => {
     })
     .then(() => res.redirect('/courses/listCourses'))
     .catch((error) => {
-        //console.log('changePasswordProcess:', error)
+        if(!req.session.errors.password) {
+            req.session.errors.password = error.message
+        }
         res.status(500).redirect('/api/changePassword')
     })
 }
@@ -156,7 +165,6 @@ exports.editProfileProcess = async (req, res) => {
     const {name, email} = req.body
 
     try {
-        //const currentUser = await User.findOne({ _id: Object(req.session.userId) })
         const currentUser = await User.findOne({ _id: req.session.userId })
         if(!currentUser) {
             req.session.errors.email = 'Cannot find the user!'
@@ -178,7 +186,9 @@ exports.editProfileProcess = async (req, res) => {
         req.session.loggedUser = currentUser.name
         res.redirect('/courses/listCourses')
     } catch (error) {
-        req.session.errors.email = error.message
+        if(!req.session.errors.email) {
+            req.session.errors.email = error.message
+        }
         res.status(500).redirect('/api/editProfile')
     }
 }
@@ -189,7 +199,7 @@ exports.logoutProcess = (req, res) => {
             return res.redirect('/')
         }
 
-        res.clearCookie('sid')
+        res.clearCookie(SESSION_NAME)
         res.redirect('/')
     })
 }

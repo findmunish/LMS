@@ -107,12 +107,12 @@ exports.userLoginValidator = async (req, res, next) => {
     }
 
     const {email, password} = req.body
-
     let errors = {}
 
-    if (!validator.isEmail( email.trim().toLowerCase() )) errors.email = 'e-Mail is not valid'
+    if(!email) errors.email = 'e-Mail is required'
+    if (email && !validator.isEmail( email.trim().toLowerCase() )) errors.email = 'e-Mail is not valid'
 
-    if(password==='') errors.password = 'Password is blank'
+    if(password && password==='') errors.password = 'Password is blank'
     if(!isPasswordValid(password)) errors.password = 'Password fails validation rules'
 
     if(Object.keys(errors).length === 0) {
