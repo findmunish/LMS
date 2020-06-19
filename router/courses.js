@@ -2,16 +2,19 @@ const express = require('express')
 const router = express.Router()
 const courseController = require('../controllers/CourseController')
 const courseValidator = require('../controllers/CourseValidator')
+const authController = require('../auth/auth.js')
+const homeRouteController = require('../controllers/homeRouteController')
 
 //UI Routes
-router.get('/listCourses', courseController.listCourses)
-router.get('/listCourse/:id', courseController.listCourse)
-router.get('/createCourse', courseController.createCourse)
-router.get('/updateCourse/:id', courseController.updateCourse)
+router.get('/listCourses', authController.isLoggedIn, courseController.listCourses)
+router.get('/listCourse/:id', authController.isLoggedIn, courseController.listCourse)
+router.get('/createCourse', authController.isLoggedIn, courseController.createCourse)
+router.get('/updateCourse/:id', authController.isLoggedIn, courseController.updateCourse)
+//router.get('/*', homeRouteController.invalidRoute)
 
 //Processes
 router.post('/createCourse', courseValidator.createCourseValidator, courseController.createCourseProcesses)
 router.post('/updateCourse/:id', courseValidator.updateCourseValidator, courseController.updateCourseProcesses)
-router.get('/deleteCourse/:id', courseController.deleteCourse)
+router.get('/deleteCourse/:id', authController.isLoggedIn, courseController.deleteCourse)
 
 module.exports = router

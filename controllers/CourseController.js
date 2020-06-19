@@ -1,39 +1,25 @@
 const Course = require('../models/Course')
-const User = require("../models/User")
 
-// const getUserName = (userId) => {
-//     let name = undefined
-//     if(user !== undefined) {
-//         User.findOne({ userId })
-//         .then((user) => name = user.name)
-//         .catch((error) => name = undefined)
-//     }
+exports.listCourses = async (req, res) => {
+    try {
+        req.session.errors = {}
 
-//     return name
-// }
+        const courses = await Course.find()
+        const data = {
+            headerTitle: "LMS | EGyan Portal",
+            title: 'LMS | Login',
+            userId: req.session.userId,
+            loggedUser: req.session.loggedUser,
+            courses: courses
+        }
 
-exports.listCourses = (req, res) => {
-    //const loggedUser = getUserName(req.session.userId)
-    const data = {
-        headerTitle: "LMS | EGyan Portal",
-        title: 'LMS | Login',
-        userId: req.session.userId,
-        loggedUser: req.session.loggedUser
+        await res.render('listCourses', data)
+    } catch (error) {
+        res.status(400).json(error)
     }
-
-    req.session.errors = {}
-
-    Course.find()
-    .then(courses => {
-        data.courses = courses
-        res.render('listCourses', data)
-    })
-    .catch(error => res.status(400).json(error))
 }
 
 exports.listCourse = (req, res) => {
-    //const id = req.params.id
-    //const loggedUser = getUserName(req.session.userId)
     const data = {
         headerTitle: "LMS | EGyan Portal",
         title: 'LMS | Login',
@@ -52,7 +38,6 @@ exports.listCourse = (req, res) => {
 }
 
 exports.createCourse = (req, res) => {
-    //const loggedUser = getUserName(req.session.userId)
     const data = {
         headerTitle: "LMS | EGyan Portal",
         title: 'LMS | Login',
@@ -84,25 +69,6 @@ exports.createCourseProcesses = (req, res) => {
 }
 
 exports.updateCourse = (req, res) => {
-    // let categories = []
-    // let names = []
-    // Course.find()
-    // .then(courses => {
-    //     courses.forEach( (course) => {
-    //         if(!categories.includes(course.category)) {
-    //             categories.push(course.category)
-    //         }
-    //         if(!names.includes(course.name)) {
-    //             names.push(course.name)
-    //         }
-    //     })
-    // })
-    // .catch(error => {
-    //     console.log(error)
-    //     res.status(400).send(error)
-    //     return
-
-    // })
     const data = {
         headerTitle: "LMS | EGyan Portal",
         title: 'LMS | Login',
@@ -117,7 +83,7 @@ exports.updateCourse = (req, res) => {
     .then((currCourse) => {
         data.currCourse = currCourse
 
-        res.render('updateCourses', data)
+        res.render('updateCourse', data)
     })
     .catch(error => res.json(error))
 }
@@ -125,7 +91,7 @@ exports.updateCourse = (req, res) => {
 exports.updateCourseProcesses = (req, res) => {
     const {id, name, category, oneLiner, duration, language, description, photo} = req.body
 
-    console.log('global:', description)
+    //console.log('global:', description)
     Course.findOne({ _id: req.params.id })
         .then(course => {
             course.name = name
@@ -136,13 +102,13 @@ exports.updateCourseProcesses = (req, res) => {
             course.description = description
             course.photo = photo
 
-            console.log('db:', course.description)
+            //console.log('db:', course.description)
 
             return course.save()
         })
         .then(course => res.redirect('/courses/listCourses'))
         .catch((error) => {
-            console.log('error updating')
+            //console.log('error updating')
             res.status(500).redirect('/courses/listCourses')
         })
 }

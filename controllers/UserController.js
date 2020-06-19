@@ -3,20 +3,12 @@ const User = require("../models/User")
 const SYNC_SALT_ROUNDS=Number(process.env.SYNC_SALT_ROUNDS)
 
 exports.userDashboard = (req, res) => {
-    const data = {
-        headerTitle: "LMS | EGyan Portal",
-        title: 'LMS | Login',
-        errors: req.session.errors,
-        userId: req.session.userId,
-        loggedUser: req.session.loggedUser
-    }
-    req.session.errors = {}
-
-    res.render('listCourses', data)
+    res.redirect('/courses/listCourses')
 }
 
 exports.login = (req, res) => {
-    //console.log('Login::Get:', req.session.userId)
+    console.log('inside login, userId', req.session.userId)
+
     const data = {
         headerTitle: "LMS | EGyan Portal",
         title: 'LMS | Login',
@@ -25,12 +17,14 @@ exports.login = (req, res) => {
         loggedUser: req.session.loggedUser
     }
     req.session.errors = {}
-
-    res.render('login', data)
+    if(req.session.userId) {
+        res.redirect('/courses/listCourses')
+    } else {
+        res.render('login', data)
+    }
 }
 
 exports.register = (req, res) => {
-    //console.log('register::Get:', req.session.userId)
     const data = {
         headerTitle: "LMS | EGyan Portal",
         title: 'LMS | Login',
@@ -40,7 +34,11 @@ exports.register = (req, res) => {
     }
     req.session.errors = {}
 
-    res.render('register', data)
+    if(req.session.userId) {
+        res.redirect('/courses/listCourses')
+    } else {
+        res.render('register', data)
+    }
 }
 
 exports.loginProcess = async (req, res) => {
@@ -68,36 +66,6 @@ exports.loginProcess = async (req, res) => {
         res.status(400).redirect('/api/login')
     }
 }
-
-// exports.loginProcess = (req, res) => {
-//     const {email, password} = req.body
-//     const errMsg = 'Either e-Mail is unregistered or password is invalid'
-
-//     user = new User()
-//     user.email = email
-//     user.password = password
-
-//     User.findOne({ email })
-//         .then((user) => {
-//             if(user) {
-//                 const valid = bcrypt.compareSync(password, user.password)
-//                 if(valid) {
-//                     req.session.userId = user._id
-//                     req.session.loggedUser = user.name
-//                     res.status(200).redirect('/courses/listCourses')
-//                 } else {
-//                     req.session.errors.password = errMsg
-//                     res.status(400).redirect('/api/login')
-//                 }
-//             } else {
-//                 req.session.errors.email = errMsg
-//                 res.status(400).redirect('/api/login')
-//             }
-//         })
-//         .catch((error) => {
-//             res.status(400).redirect('/api/login')
-//         })
-// }
 
 exports.registerProcess = async (req, res) => {
     const {name, type, email, password} = req.body

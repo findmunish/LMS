@@ -1,0 +1,27 @@
+<%- include ('header') %>
+
+<% if(errors && Object.keys(errors).length > 0 ) { %>
+    <div class="alert alert-danger">
+        <ul>
+            <% for(let i in errors) { %>
+                <li><%=errors[i]%></li>
+            <% } %>
+        </ul>
+    </div>
+<% } %>
+
+<div class="row">
+    <div class="col">
+        <span>
+            <img src="/assets/egyan_logo.png" class="square" alt="EGyan LMS Image" style="width:125px">
+        </span>
+        <span>
+            <h1><img src="/assets/403_forbidden.jpg" class="rounded-circle" alt="403 Forbidden" style="width:80px"> 403 Forbidden</h1>
+        </span>
+        <h6>Click <a href="/">here</a> to go back to home page</h6>
+    </div>
+</div>
+<hr />
+<hr />
+
+<%- include ('footer') %>

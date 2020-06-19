@@ -32,9 +32,9 @@ const publicDirectoryPath = path.join(__dirname, "./public")
 
 app.use(express.static(publicDirectoryPath))
 
-app.use('/', homeRouter)
 app.use('/courses', coursesRouter)
 app.use('/api', usersRouter)
+app.use('/', homeRouter)
 
 
 module.exports = app
