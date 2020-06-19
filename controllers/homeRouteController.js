@@ -24,9 +24,9 @@ exports.invalidRoute = (req, res) => {
     const data = {
         headerTitle: "LMS | EGyan Portal",
         title: 'LMS | Login',
-        userId: undefined,
+        userId: req.session.userId,
         errors: req.session.errors,
-        loggedUser: undefined,
+        loggedUser: req.session.loggedUser,
         path: req.path,
         method: req.method
     }

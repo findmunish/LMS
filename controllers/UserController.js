@@ -121,7 +121,9 @@ exports.changePasswordProcess = (req, res) => {
         if(valid) {
             const salt = bcrypt.genSaltSync(SYNC_SALT_ROUNDS)
             const hashedPassword = bcrypt.hashSync(newPassword, salt)
+            
             user.password = hashedPassword
+            
             return user.save()
         } else {
             req.session.errors.password = "Password cannot be authenticated"
@@ -185,9 +187,7 @@ exports.editProfileProcess = async (req, res) => {
         }
         currentUser.email = email
         currentUser.name = name
-        console.log('BEFORE SAVING THE USEER')
         await currentUser.save()
-        console.log('AFTER SAVING THE USER')
 
         req.session.loggedUser = currentUser.name
         res.redirect('/courses/listCourses')
